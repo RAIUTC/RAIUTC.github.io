@@ -1,26 +1,26 @@
 # The primary author of this blog.
 # Must be the same as `author` in `_config.yml`.
 # Change `author1` to your shortname.
-author1:
-  name:              <firstname> <lastname>
-  email:             <mail@domain.tld>
+raituc:
+  name:              <Sunuk> <Kim>
+  email:             <syi05003@gmail.com>
 
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:             |
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    
-    Open `_data/authors.yml` to edit this text.
+    RAITUC의 개발블로그에 오신 것을 환영합니다! 
+
+    이 블로그는 프로그래밍과 관련된 다양한 주제에 대해 이야기하고, 기술적인 여정을 함께 나누는 공간입니다.
+    여기서는 인공지능, 파이썬(Python)과 같은 프로그래밍 언어 등 다양한 기술 주제를 다룰 것입니다.
+    또한, 프로그래머로서의 경험과 학습 과정, 실험적인 프로젝트, 새로운 기술 도입에 대한 이야기를 나눌 예정입니다.
 
   # This photo will be used in the about section
   picture:
-    path:            https://via.placeholder.com/128x128
+    path:            /assets/img/me.jpeg
     # srcset is optional, but can be used to provide higher res versions for retina displays
     srcset:
-      1x:            https://via.placeholder.com/128x128
-      2x:            https://via.placeholder.com/256x256
+      1x:            /assets/img/me.jpeg
+      2x:            /assets/img/me.jpeg
 
   # Social media icons in sidebar
   # Comment/uncommet to show/hide
