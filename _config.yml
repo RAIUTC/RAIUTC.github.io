@@ -32,7 +32,7 @@ description:           |
     또한, 프로그래머로서의 경험과 학습 과정, 실험적인 프로젝트, 새로운 기술 도입에 대한 이야기를 나눌 예정입니다.
 
 # A shorter description for the sidebar.
-tagline:               RAITUC의 개발블로그에 오신 것을 환영합니다! 
+tagline:               RAITUC의 블로그에 오신 것을 환영합니다! 
 
 # A list of keywords for your blog
 keywords:              []
@@ -43,21 +43,63 @@ keywords:              []
 logo:                  /assets/img/logo.png
 
 # This should be the same author as first entry in `_data/authors.yml`.
-author:
+raiutc:
   # Used by `jekyll-feed`:
-  name:                <firstname> <lastname>
-  email:               <mail@domain.tld>
+  name:                Sunuk Kim
+  email:               syi05003@gmail.com
   # # Used by `jekyll-seo-tag`:
   # twitter:             <username>
+  picture:
+    path:            /assets/img/me.png
+    # srcset is optional, but can be used to provide higher res versions for retina displays
+    srcset:
+      1x:            /assets/img/me.png
+      2x:            /assets/img/me2.png
+  social:
+    # twitter:         <username>
+    github:          RAIUTC
+    email:           syi05003@gmail.com
+    # rss:             https://<url>/feed.xml
+    # facebook:        <username>
+    # google:          <number>
+    # vk:              <username>
+    # youtube:         <string_string_string>
+    # vimeo:           <username>
+    # vine:            <username>
+    # spotify:         <user>/<number>
+    # soundcloud:      <username>
+    # lastfm:          <username>
+    instagram:       sun_uk_kim
+    # flickr:          <string@string>
+    # 500px:           <username>
+    # dribbble:        <username>
+    # behance:         <username>
+    # deviantart:      <username>
+    # ello:            <username>
+    # twitch:          <username>
+    # steam:           <number>
+    # reddit:          <username>
+    # tumblr:          <username>
+    # pinterest:       <username>
+    # foursquare:      <number>
+    # yelp:            <string>
+    # stackoverflow:   <number/username>
+    # npm:             <username>
+    # hackernews:      <username>
+    # trello:          <firstnamelastname>
+    # linkedin:        <firstname-lastname-string>
+    # xing:            <firstname_lastname_counter>
+    # blogger:         <number>
+    # delicious:       <username>
+    # stumbleupon:     <username>
+    # paypal:          <username>
+    # download:        <url>
+    # keybase          <username>
 
 # Add links to the sidebar.
 menu:
-  - title:             Example
+  - title:             인공지능(AI)
     url:               /example/
-  - title:             Documentation
-    url:               /docs/
-  - title:             About
-    url:               /about/
 
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
@@ -83,7 +125,7 @@ paginate_path:         /:num/
 # Theme
 # ---------------------------------------------------------------------------------------
 
-# theme: jekyll-theme-hydejack
+theme: jekyll-theme-hydejack
 remote_theme: hydecorp/hydejack@v9
 
 
@@ -91,7 +133,7 @@ remote_theme: hydecorp/hydejack@v9
 # ----------------------------------------------------------------------------------------
  
 # Sidebar image and theme color of the site.
-accent_image:          /assets/img/sidebar-bg.jpg
+accent_image:          /assets/img/background.jpg
 accent_color:          rgb(79,177,186)
 
 # This is used for the `theme-color` meta tag,

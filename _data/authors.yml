@@ -2,8 +2,8 @@
 # Must be the same as `author` in `_config.yml`.
 # Change `author1` to your shortname.
 raituc:
-  name:              <Sunuk> <Kim>
-  email:             <syi05003@gmail.com>
+  name:              Sunuk Kim
+  email:             syi05003@gmail.com
 
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
@@ -27,8 +27,8 @@ raituc:
   # Rearrange to change the order in which they appear
   social:
     # twitter:         <username>
-    github:          <RAIUTC>
-    email:           <syi05003@gmail.com>
+    github:          RAIUTC
+    email:           syi05003@gmail.com
     # rss:             https://<url>/feed.xml
     # facebook:        <username>
     # google:          <number>
@@ -39,7 +39,7 @@ raituc:
     # spotify:         <user>/<number>
     # soundcloud:      <username>
     # lastfm:          <username>
-    instagram:       <sun_uk_kim>
+    instagram:         sun_uk_kim
     # flickr:          <string@string>
     # 500px:           <username>
     # dribbble:        <username>
