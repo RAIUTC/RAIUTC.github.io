@@ -20,16 +20,19 @@
 lang:                  en
 
 # The title of your blog. Used in the sidebar and the browser tab.
-title:                 Starter Kit
+title:                 RAIUTC
 
 # A short description (~150 chars) of the page used for the meta description tag.
 # Can use markdown, but no more than one paragraph (enforced by `>`)
-description:           >
-  Hydejack is a boutique Jekyll theme for hackers, nerds, and academics,
-  with a focus on personal sites that are meant to impress.
+description:           |
+    RAITUC의 개발블로그에 오신 것을 환영합니다! 
+
+    이 블로그는 프로그래밍과 관련된 다양한 주제에 대해 이야기하고, 기술적인 여정을 함께 나누는 공간입니다.
+    여기서는 인공지능, 파이썬(Python)과 같은 프로그래밍 언어 등 다양한 기술 주제를 다룰 것입니다.
+    또한, 프로그래머로서의 경험과 학습 과정, 실험적인 프로젝트, 새로운 기술 도입에 대한 이야기를 나눌 예정입니다.
 
 # A shorter description for the sidebar.
-tagline:               Change `tagline` in `_config.yml`
+tagline:               RAITUC의 개발블로그에 오신 것을 환영합니다! 
 
 # A list of keywords for your blog
 keywords:              []
