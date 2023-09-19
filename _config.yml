@@ -99,7 +99,7 @@ raiutc:
 # Add links to the sidebar.
 menu:
   - title:             인공지능(AI)
-    url:               /example/
+    url:               /ai/
 
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
