@@ -100,6 +100,8 @@ raiutc:
 menu:
   - title:             인공지능(AI)
     url:               /ai/
+  - title:             컴퓨터보안(Computer Security)
+    url:               /computer-security/
 
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
