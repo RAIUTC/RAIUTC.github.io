@@ -138,7 +138,7 @@ print("decrypting... ", cipher2.decrypt(ciphertext))
 > 단점: 같은 평문에 대해 동일한 암호문 생성
 
 - **CBC(Cipher Block Chaining)**
-![400x200](/assets/img/blog/cbc.png "Cipher Block Chaining")
+![400x200](/assets/img/blog/CBC.png "Cipher Block Chaining")
 
 Chain: 뒤에 것을 앞에 연결
 
