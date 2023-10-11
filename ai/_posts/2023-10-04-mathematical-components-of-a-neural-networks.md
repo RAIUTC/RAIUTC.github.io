@@ -351,13 +351,13 @@ def naive_add(x, y):
 
 - 덧셈도 동일, 같은 원리로 원소별 곱셈, 뺄셈 등을 할 수 있음
 - 넘파이는 **BLAS(Basic Linear Algebra Subprogram)**를 통해 연산들을 처리할 수 있음
+
 ~~~python
 import numpy as np
 
 z = x + y # 원소별 덧셈
 z = np.maximum(z, 0.) # 원소별 렐루 함수
 ~~~
-
 - 넘파이는 위 코드를 엄청난 속도로 처리한다
 
 ~~~python
@@ -663,3 +663,398 @@ loss_value = f(W) ∙∙∙f는 W가 변화할 때 손실 값이 형성하는 �
 - 이런 응용들을 모두 **최적화 방법(optimazaion method)** 또는 **옵티마이저**라고 부름
 - 특히 여러 응용에서 사용하는 **모멘텀(momentum)** 개념은 아주 중요
 - 모멘텀은 SGD에 있는 2개의 문제점인 수렴 속도와 지역 최솟값을 해결
+
+![150x100](/assets/img/blog/local_minimum_global_minimum.jpg "지역 최솟값(local minimum)과 전역 최솟값(global minimum)")
+
+- 위 그림에서 볼 수 있듯이 어떤 파라미터 값에서는 지역 최솟값에 도달
+- 지역 최솟값 지점 근처에서는 왼쪽으로 이동해도 손실이 증가하고, 오른쪽으로 이동해도 손실이 증가
+- 대상 파라미터가 작은 학습률을 가진 SGD로 최적화되었다면 최적화 과정이 전역 최솟값으로 향하지 못하고 이 지역 최솟값에 갇히게 될 것
+
+- 모멘텀을 사용하여 이 문제를 피할 수 있음
+- 실전에서 현재 그레이디언트 값뿐만 아니라 이전에 업데이트한 파라미터에 기초하여 파라미터 w를 업데이트
+
+~~~python
+past_velocity = 0.
+momentum = 0.1  # 모멘텀 상수
+while loss > 0.01:  # 최적화 반복 루프
+    w, loss, gradient = get_current_parameters()
+    velocity = momentum * past_velocity - learning_rate * gradient
+    w = w + momentum * velocity - learning_rate * gradient
+    past_velocity = velocity
+    update_parameters(w)
+~~~
+
+- 위 코드는 단순한 구현 예
+
+### 도함수 연결: 역전파 알고리즘
+
+#### 연쇄 법칙
+
+- 역전파는 (덧셈, 렐루, 텐서 곱셈 같은) 간단한 연산의 도함수를 사용해서 이런 기초적인 연산을 조합한 복잡한 연산의 그레이디언트를 쉽게 계산하는 방법
+- 결정적으로 신경망은 서로 연결된 많은 텐서 연산으로 구성
+- 이런 많은 텐서 연산은 간단하고 해당 도함수가 알려져 있음
+
+- 미적분의 **연쇄 법칙(chain rule)**을 사용하면 이렇게 연결된 함수의 도함수를 구할수 있음
+- 두 함수 f와 g가 있고, 두 함수를 연결한 fg가 있다고 가정
+- fg(x) == f(g(x))
+~~~python
+def fg(x):
+    x1 = g(x)
+    y = f(xl)
+    return y
+~~~
+
+- 연쇄 법칙을 사용하면 grad(y,x) == grad(y,x1) * grad(x1, x)가 됨
+- f와 g의 도함수를 알고 있다면 fg의 도함수를 계산할 수 있음
+
+~~~python
+def fghj(x):
+    x1 = j(x)
+    x2 = h(x1)
+    x3 = g(x2)
+    y = f(x3)
+    return y
+
+grad(y, x) == (grad(y, x3) * grad(x3, x2) * grad(x2, x1) * grad(x1, x))
+~~~
+- 신경망의 그레이디언트 값을 계산하는데 이 연쇄 법칙을 적용하는 것이 **역전파** 알고리즘
+
+#### 계산 그래프를 활용한 자동 미분
+
+> 첫 번째로 만든 모델의 그래프 표현
+
+![100x200](/assets/img/blog/calculate_graph_expression_with_2_layer.jpg "2개의 층으로 구성된 모델의 계산 그래프 표현")
+
+![100x200](/assets/img/blog/calculate_graph_expression_with_2_layer2.jpg "2개의 층으로 구성된 모델의 계산 그래프 표현")
+
+- 계산 그래프를 사용하면 계산을 데이터로 다룰 수 있기 때문에 컴퓨터 과학 분야에서 매우 성공적인 추상화 방법
+- 계산 가능한 표현은 기계가 인식할 수 있는 데이터 구조로 인코딩되어 다른 프로그램의 입력이나 출력으로 사용할 수 있음
+
+**역전파를 이해하기 위해 간단한 계산 그래프를 살펴보자**
+
+![100x200](/assets/img/blog/simple_calculate_graph.jpg "간단한 계산 그래프 예")
+
+- 하나의 선형 층만 있고 모든 변수는 스칼라
+- 2개의 스칼라 변수 w와 b, 스칼라 입력 x를 받아 몇 개의 연산을 적용하여 출력 y를 만듦
+- 마지막으로 절댓값 오차 손실 함수 loss_val = abs(y_true - y)를 적용
+- loss_val을 최소화하도록 w와 b를 업데이트하기 위해 grad(loss_val, b)와 grad(loss_val, w)를 계산
+
+![100x200](/assets/img/blog/running_forward_pass.jpg "정방향 패스 실행")
+
+- 입력 x, 타깃 y_true, w, b에 해당하는 이 크래프의 '입력 노드(input node)'에 구체적인 값을 설정
+- 이 값을 loss_val에 도달할 때까지 위에서 아래로 그래프의 모든 노드에 전파
+- 이러한 과정이 정방향 패스(forward pass)
+
+![200x150](/assets/img/blog/running_backward_pass.jpg "역방향 패스 실행")
+
+- 그래프를 뒤집어 보자
+- A에서 B로 가는 그래프의 모든 에지(edge)에 대해 B에서 A로 가는 반대 에지를 만듦
+- A가 바뀔 때 B가 얼마나 변하는지 물음
+- 즉, grad(B,A)는 반대 방향에서 만든 에지에 이 값을 표시
+- 이 역방향 그래프가 역방향 패스를 나타냄
+
+- 다음과 같은 값을 얻을 수 있음
+    - grad(loss_val, x2) = 1 &rarr; x2가 epsilon만큼 변할 때 loss_val = abs(4 - x2)가 같은 양만큼 변하기 때문임
+    - grad(x2, x1) = 1 &rarr; x1이 epsilon만큼 변할 때 x2 = x1 + b = x1 + 1이 같은 양만큼 변하기 때문임
+    - grad(x2, b) = 1 &rarr; b가 epsilon만큼 변할 때 x2 = x1 + b = 6 + b가 같은 양만큼 변하기 때문임
+    - grad(x1, w) = 2 &rarr; w가 epsilon만큼 변할 때 x1 = x * w = 2 * w는 2 * epsilon만큼 변하기 때문임
+
+- 연쇄 법칙이 역방향 그래프에 대해 알려 주는 것은 노드가 연결된 경로를 따라 각 에지의 도함수를 곱하면 어떤 노드에 대한 다른 노드의 도함수를 얻을 수 있다는 것
+> 예를 들어 grad(loss_val, w) = grad(loss_val, x2) * grad(x2, x1) * grad(x1, w)
+
+![200x150](/assets/img/blog/route_loss_val_to_w_in_backward_pass.jpg "역방향 그래프에서 loss_val부터 w까지의 경로")
+
+- 이 그래프에 연쇄 법칙을 적용하여 원하는 값을 구할 수 있음
+    - grad(loss_val, w) = 1 * 1 * 2 = 2
+    - grad(loss_val, b) = 1 * 1 = 1
+
+- 역방향 그래프에서 관심 대상인 두 노드 a와 b를 연결하는 경로가 여러 개라면 모든 경로의 도함수를 더해서 grad(a,b)를 얻을 수 있음
+
+- 역전파는 연쇄 법칙을 계산 그래프에 적용한 것 뿐
+- 역전파는 최종 손실 값에서 시작하여 아래층에서 맨 위층까지 거꾸로 거슬러 올라가 각 파라미터가 손실 값에 기여한 정도를 계산
+- 즉, 계산 그래프에서 각 노드의 손실 기여도를 역전파
+
+- 요즘에는 텐서플로와 같이 **자동 미분(automatic differentiation)**이 가능한 최신 프레임워크를 사용해서 신경망을 구현
+- 자동 미분은 방금 본 계산 그래프와 같은 형태로 구현
+- 자동 미분은 정방향 패스를 작성하는 것 외에 다른 작업 없이 미분 가능한 텐서 연산의 어떤 조합에 대해서도 그레이디언트를 계산할 수 있음
+
+#### 텐서플로의 그레이디언트 테이프
+
+- 텐서플로의 강력한 자동 미분 기능을 활용할 수 있는 API는 GradientTape
+- 이 API는 파이썬의 with 문과 함께 사용하여 해당 코드 블록 안의 모든 텐서 연산을 계산 그래프 형태로 기록
+- 그다음 이 그래프를 사용해서 (tf.Variable 클래스의 인스턴스인) 변수 또는 변수 집합에 대한 어떤 출력의 그레이디언트도 계산할 수 있음
+- tf.Variable은 변경 가능한(mutable) 상태를 담기 위한 특별한 종류의 텐서
+- 예를 들어 신경망의 가중치는 항상 tf.Variable의 인스턴스
+
+~~~python
+import tensorflow as tf
+
+x = tf.Variable(0.) # 초깃값 0으로 스칼라 변수를 생성
+with tf.GradientTape() as tape:   # GradientTape블록을 시작한다
+    y = 2 * x + 3     # 이 블록 안에서 텐서 연산을 실행한다
+grad_of_y_wrt_x = tape.gradient(y, x)   # tape를 사용해서 변수x에 대한 출력 y를 계산한다
+~~~
+
+~~~python
+x = tf.Variable(tf.zeros((2, 2)))   # 크기가 (2,2)이고 초깃값이 모두 0인 변수를 생성
+with tf.GradientTape() as tape: 
+    y = 2 * x + 3
+grad_of_y_wrt_x = tape.gradient(y, x)   # grad_of_y_wrt_x는(x와 크기가 같은)(2,2) 크기의 텐서로 x = [[0,0],[0,0]]일 때 y = 2 * x + 3의 곡률을 나타낸다
+~~~
+
+- GradientTape를 다차원 텐서와 함께 사용할 수 있음
+
+~~~python
+W = tf.Variable(tf.random.uniform((2, 2)))
+b = tf.Variable(tf.zeros((2,)))
+x = tf.random.uniform((2, 2))
+with tf.GradientTape() as tape:
+    y = tf.matmul(x, W) + b   # matmul은 텐서플로의 점곱 함수
+grad_of_y_wrt_W_and_b = tape.gradient(y, [W, b])    # grad_of_y_wrt_W_and_b는 2개의 텐서를 담은 리스트이다. 각 텐서는 W,b와 크기가 같다
+~~~
+
+- 변수 리스트의 그레이디언트를 계산할 수도 있음
+
+## 2.5 첫 번째 예제 다시 살펴보기
+
+- 처음 구현한 모델은 층이 서로 연결되어 모델을 구성하고, 모델은 입력 데이터를 예측으로 매핑
+- 그다음 손실 함수가 이 예측과 타깃을 비교하여 손실 값을 만듦
+- 즉, 모델의 예측이 기대한 것에 얼마나 잘 맞는지 측정
+- 옵티마이저는 이 손실 값을 사용하여 모델의 가중치를 업데이트
+
+![150x100](/assets/img/blog/relation_between_model_layer_loss_function_optimizer.jpg "모델, 층, 손실 함수, 옵티마이저 사이의 관계")
+
+- **입력 데이터**
+
+~~~python
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+train_images = train_images.reshape((60000, 28 * 28))
+train_images = train_images.astype("float32") / 255
+test_images = test_images.reshape((10000, 28 * 28))
+test_images = test_images.astype("float32") / 255
+~~~
+
+- 입력 이미지의 데이터 타입은 float32로, 훈련 데이터는 (60000, 784) 크기, 테스트 데이터는 (10000, 784)크기의 넘파이 배열로 저장
+
+- **모델**
+
+~~~python
+model = keras.Sequential([
+    layers.Dense(512, activation="relu"),
+    layers.Dense(10, activation="softmax")
+])
+~~~
+
+- 이 모델은 2개의 Dense층이 연결되어 있고 각 층은 가중치 텐서를 포함하여 입력 데이터에 대한 몇 개의 간단한 텐서 연산을 적용
+- 층의 속성인 가중치 텐서는 모델이 정보를 저장하는 곳
+
+- **컴파일 단계**
+
+~~~python
+model.compile(optimizer="rmsprop",
+              loss="sparse_categorical_crossentropy",
+              metrics=["accuracy"])
+~~~
+
+- sparse_categorical_crossentropy는 손실 함수
+- 손실값은 가중치 텐서를 학습하기 위한 피드백 신호로 사용되며 훈련하는 동안 최소화
+- 미니 배치 확률적 경사 하강법을 통해 손실이 감소
+- 경사 하강법을 적용하는 구체적인 방식은 첫 번째 매개변수로 전달된 rmsprop 옵티마이저에 의해 결정
+
+- **훈련 반복**
+
+~~~python
+model.fit(train_images, train_labels, epochs=5, batch_size=128)
+~~~
+
+- fit 메서드를 호출했을 때 다음과 같이 학습이 반복
+- 모델이 128개 샘플 미니 배치로 훈련 데이터를 다섯 번 반복(전체 훈련 데이터에 수행되는 각 반복을 **에포크(epoch)**라고 함)
+- (미적분이 연쇄 법칙에서 파생된 역전파 알고리즘을 사용하여) 각 배치에서 모델이 가중치에 대한 손실의 그레이디언트를 계산
+- 그다음 이 배치에서 손실 값을 감소시키는 방향으로 가중치를 이동시킴
+- 다섯 번의 에포크 동안 모델은 2,345번의 그레이디언트 업데이트를 수행할 것(에포크마다 469번)
+- 최종적으로 원하는 성능을 가진 모델을 얻을 수 있을 것
+
+### 텐서플로를 사용하여 첫 번째 예제를 밑마탁부터 다시 구현하기
+
+#### 단순한 Dense 클래스
+
+output = activation(dot(W, input) + b)
+
+- Dense층이 구현하는 입력 변환
+- W와 b는 모델 파라미터, activation은 각 원소에 적용되는 함수(일반적으로 relu이지만 마지막 층에는 softmax를 사용)
+
+~~~python
+import tensorflow as tf
+
+class NaiveDense:
+    def __init__(self, input_size, output_size, activation):
+
+        self.activation = activation
+
+        w_shape = (input_size, output_size)   # 랜덤한 값으로 초기화된(input_size, output_size)크기의 행렬 W를 만든다
+        w_initial_value = tf.random.uniform(w_shape, minval=0, maxval=1e-1)
+        self.W = tf.Variable(w_initial_value)
+
+        b_shape = (output_size,)    # 0으로 초기화된 (output_size,)크기의 벡터 b를 만든다
+        b_initial_value = tf.zeros(b_shape)
+        self.b = tf.Variable(b_initial_value)
+
+    def __call__(self, inputs):   # 정방향 패스를 수행
+        return self.activation(tf.matmul(inputs, self.W) + self.b)
+
+    @property
+    def weights(self):    # 층의 가중치를 추출하기 위한 메서드
+        return [self.W, self.b]
+~~~
+
+#### 단순한 Sequential 클래스
+
+~~~python
+class NaiveSequential:
+    def __init__(self, layers):
+        self.layers = layers
+
+    def __call__(self, inputs):
+        x = inputs
+        for layer in self.layers:
+           x = layer(x)
+        return x
+
+    @property
+    def weights(self):
+       weights = []
+       for layer in self.layers:
+           weights += layer.weights
+       return weights
+~~~
+
+~~~python
+model = NaiveSequential([
+    NaiveDense(input_size=28 * 28, output_size=512, activation=tf.nn.relu),
+    NaiveDense(input_size=512, output_size=10, activation=tf.nn.softmax)
+])
+assert len(model.weights) == 4
+~~~
+
+- NativeDense 클래스와 NativeSequential 클래스를 사용하여 케라스와 유사한 모델을 만들 수 있다
+
+#### 배치 제너레이터
+
+~~~python
+import math
+
+class BatchGenerator:
+    def __init__(self, images, labels, batch_size=128):
+        assert len(images) == len(labels)
+        self.index = 0
+        self.images = images
+        self.labels = labels
+        self.batch_size = batch_size
+        self.num_batches = math.ceil(len(images) / batch_size)
+
+    def next(self):
+        images = self.images[self.index : self.index + self.batch_size]
+        labels = self.labels[self.index : self.index + self.batch_size]
+        self.index += self.batch_size
+        return images, labels
+~~~
+
+#### 훈련 스텝 실행하기
+
+- 한 배치 데이터에서 모델을 실행하고 가중치를 업데이트 하는 일
+- 이를 위해 다음이 필요함
+    1. 배치에 있는 이미지에 대한 모델의 예측을 계산
+    2. 실제 레이블을 사용하여 이 예측의 손실 값을 계산
+    3. 모델 가중치에 대한 손실의 그레이디언트를 계산
+    4. 이 그레이디언트의 반대 방향으로 가중치를 조금 이동
+
+~~~python
+def one_training_step(model, images_batch, labels_batch):
+
+    # 정방향 패스를 실행한다.(GradientTape 블록 안에서 모델의 예측을 계산한다)  
+    with tf.GradientTape() as tape:                     
+        predictions = model(images_batch)
+        per_sample_losses = tf.keras.losses.sparse_categorical_crossentropy(
+            labels_batch, predictions)
+        average_loss = tf.reduce_mean(per_sample_losses)
+
+    gradients = tape.gradient(average_loss, model.weights)    # 가중치에 대한 손실의 그레이디언트를 계산한다. gradients리스트의 각 항목은 model.weights리스트에 있는 가중치에 매칭된다.
+    update_weights(gradients, model.weights)    # 이 그레이디언트를 사용하여 가중치를 업데이트한다
+    return average_loss
+~~~
+
+~~~python
+learning_rate = 1e-3
+
+def update_weights(gradients, weights):
+    for g, w in zip(gradients, weights):
+        w.assign_sub(g * learning_rate)   # 텐서플로 변수의 assign_sub 메서드는 -=과 동일
+~~~
+
+- '가중치 업데이트'단계의 목적은 이 배치의 손실을 감소시키기 위한 방향으로 가중치를 '조금' 이동하는 것
+- 이동의 크기는 '학습률'에 의해 결정
+- update_weights 함수를 구현하는 가장 간단한 방법은 각 가중치에서 gradient * learning_rate를 빼는 것
+
+- 실제로는 이런 가중치 업데이트 단계를 수동으로 구현하는 경우는 거의 없고 케라스의 Optimizer 인스턴스를 이용
+
+~~~python
+from tensorflow.keras import optimizers
+
+optimizer = optimizers.SGD(learning_rate=1e-3)
+
+def update_weights(gradients, weights):
+    optimizer.apply_gradients(zip(gradients, weights))
+~~~
+
+#### 전체 훈련 루프
+
+~~~python
+def fit(model, images, labels, epochs, batch_size=128):
+    for epoch_counter in range(epochs):
+        print(f"에포크 {epoch_counter}")
+        batch_generator = BatchGenerator(images, labels)
+        for batch_counter in range(batch_generator.num_batches):
+            images_batch, labels_batch = batch_generator.next()
+            loss = one_training_step(model, images_batch, labels_batch)
+            if batch_counter % 100 == 0:
+                print(f"{batch_counter}번째 배치 손실: {loss:.2f}")
+~~~
+
+- 함수를 테스트
+
+~~~python
+from tensorflow.keras.datasets import mnist
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+
+train_images = train_images.reshape((60000, 28 * 28))
+train_images = train_images.astype("float32") / 255
+test_images = test_images.reshape((10000, 28 * 28))
+test_images = test_images.astype("float32") / 255
+
+fit(model, train_images, train_labels, epochs=10, batch_size=128)
+~~~
+
+- 모델 평가
+
+~~~python
+predictions = model(test_images)
+predictions = predictions.numpy()   # 텐서플로 텐서의 .numpy() 메서드를 호출하여 넘파이 배열로 바꾼다
+predicted_labels = np.argmax(predictions, axis=1)
+matches = predicted_labels == test_labels
+print(f"정확도: {matches.mean():.2f}")
+~~~
+
+## 2.6 요약
+
+- **텐서**는 현대 머신 러닝 시스템의 기초. 텐서는 dtype, ndim, shape 속성을 제공
+- 텐서 연산(덧셈, 텐서 곱셈, 원소별 곱셈 등)을 통해 수치 텐서를 조작할 수 있음. 이런 연산을 기하학적 변형을 적용하는 것으로 이해할 수 있음. 일반적으로 딥러닝의 모든 것은 기하학적으로 해석할 수 있음
+- 딥러닝 모델은 가중치 텐서를 매개변수로 받는 간단한 텐서 연산을 연결하여 구성
+- 모델의 가중치는 모델이 학습한 '지식'을 저장하는 곳. **학습(learning)**은 훈련 데이터 샘플과 그에 상응하는 타깃이 주어졌을 때 손실 함수를 최소화하는 모델의 가중치 값을 찾는 것을 의미
+
+- 데이터 샘플과 타깃의 배치를 랜덤하게 뽑고 이 배치에서 모델 파라미터에 대한 손실의 그레이디언트를 계산함으로써 학습이 진행. 모델의 파라미터는 그레이디언트의 반대 방향으로 조금씩(학습률에 의해 정의된 크기만큼) 움직임 이를 **미니 배치 경사 하강법**이라고 부름
+- 전체 학습 과정은 신경망에 있는 모든 텐서 연산이 미분 가능하기 때문에 가능. 현재 파라미터와 배치 데이터를 그레이디언트 값에 매핑해 주는 그레이디언트 함수를 구성하기 위해 미분의 연쇄 법칙을 사용할 수 있음. 이를 역전파라고 부름
+- 두 가지 핵심 개념은 **손실**과 **옵티마이저**. 이 두가지는 모델에 데이터를 주입하기 전에 정의되어야 함
+
+- 손실은 훈련하는 동안 최소화해야 할 양이므로 해결하려는 문제의 성공을 측적하는 데 사용
+- 옵티마이저는 손실에 대한 그레이디언트가 파라미터를 업데이트하는 정확한 방식을 정의
+> 예를 들어 RMSProp 옵티마이저, 모멘텀을 사용한 SGD 등
