@@ -102,6 +102,8 @@ menu:
     url:               /ai/
   - title:             컴퓨터보안(Computer Security)
     url:               /computer-security/
+  - title:             임베디드 시스템(Embedded System)
+    url:               /embedded-system/
 
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
