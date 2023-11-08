@@ -3,7 +3,7 @@ layout: post
 title: Public Key Cipher(공개키 암호화)
 description: |
   Public Key Cipher(공개키 암호화)의 개념, 사용 사례, 그리고 주요한 특징들을 살펴보겠습니다.
-
+categories: 컴퓨터보안(Security)
 sitemap: false
 hide_last_modified: true
 ---

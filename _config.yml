@@ -104,6 +104,8 @@ menu:
     url:               /computer-security/
   - title:             임베디드 시스템(Embedded System)
     url:               /embedded-system/
+  - title:             클라우드컴퓨팅(Cloud Computing)
+    url:               /cloud-computing/
 
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
@@ -129,7 +131,7 @@ paginate_path:         /:num/
 # Theme
 # ---------------------------------------------------------------------------------------
 
-# theme: jekyll-theme-hydejack
+theme: jekyll-theme-hydejack
 remote_theme: hydecorp/hydejack@v9
 
 

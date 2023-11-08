@@ -3,7 +3,7 @@ layout: post
 title: 일회성 패드(ONE-TIME PAD)
 description: |
   OTP(One-Time Pad)의 개념, 동작 원리, 사용 사례, 그리고 주요한 특징들을 살펴보겠습니다.
-
+categories: 컴퓨터보안(Security)
 sitemap: false
 hide_last_modified: true
 ---

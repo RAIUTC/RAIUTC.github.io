@@ -8,6 +8,7 @@ description: |
   4 신경망의 엔진: 그레이디언트 기반 최적화 <br>
   5 첫 번째 예제 다시 살펴보기 <br>
   6 요약 <br>
+categories: 인공지능(AI)
 sitemap: false
 hide_last_modified: true
 ---

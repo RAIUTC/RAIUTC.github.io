@@ -3,7 +3,7 @@ layout: post
 title: Introduction to cryptography [암호학 개론]
 description: |
   암호학의 전반적인 개론을 다루는 글입니다.
-
+categories: 컴퓨터보안(Security)
 sitemap: false
 hide_last_modified: true
 ---

@@ -5,7 +5,7 @@ description: |
   대칭키 암호(Symmetric Key Cipher)는 현대 정보 보안에서 핵심적인 역할을 하는 암호화 기술 중 하나입니다. 
   이 기술은 데이터의 기밀성을 유지하고 무단 액세스로부터 보호하기 위해 많이 사용됩니다. 
   이 글에서는 대칭키 암호화의 작동 원리와 중요성에 대해 알아보겠습니다.
-
+categories: 컴퓨터보안(Security)
 sitemap: false
 hide_last_modified: true
 ---

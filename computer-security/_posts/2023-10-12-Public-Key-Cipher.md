@@ -3,7 +3,7 @@ layout: post
 title: Public Key Cipher
 description: |
   Public Key Cipher(공개키 암호화)에 대한 글입니다.
-
+categories: 컴퓨터보안(Security)
 sitemap: false
 hide_last_modified: true
 ---

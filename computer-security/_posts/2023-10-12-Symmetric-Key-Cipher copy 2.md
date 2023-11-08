@@ -3,7 +3,7 @@ layout: post
 title: Symmetric Key Cipher [대칭키 암호화]
 description: |
   Symmetric Key Cipher(대칭키 암호화)에 대한 글입니다.
-
+categories: 컴퓨터보안(Security)
 sitemap: false
 hide_last_modified: true
 ---

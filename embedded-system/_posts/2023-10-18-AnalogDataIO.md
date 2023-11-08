@@ -3,7 +3,7 @@ layout: post
 title: 아날로그 데이터 입출력
 description: |
   아두이노(Arduino)를 통한 아날로그 데이터 입출력에 대한 글입니다.
-
+categories: 임베디드 시스템(Embedded System)
 sitemap: false
 hide_last_modified: true
 ---
