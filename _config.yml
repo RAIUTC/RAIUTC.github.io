@@ -106,6 +106,9 @@ menu:
     url:               /embedded-system/
   - title:             클라우드컴퓨팅(Cloud Computing)
     url:               /cloud-computing/
+  - title:             자료구조(Data Structure)
+    url:               /data-structure/
+  
 
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
