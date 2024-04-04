@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Intro
+title: 블록체인 기술
 description: |
   
 categories: 블록체인
