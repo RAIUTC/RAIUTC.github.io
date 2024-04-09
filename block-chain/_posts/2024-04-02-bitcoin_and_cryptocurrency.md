@@ -2,7 +2,7 @@
 layout: post
 title: 비트코인과 암호화폐
 description: |
-  
+  비트코인과 암호화폐에 대한 포괄적인 이해를 제공하는 글입니다. 초기 비트코인의 발행과 작동 원리부터 블록체인 기술의 구조, 비트코인과 이더리움의 차이, 그리고 코인과 토큰의 개념까지 다루고 있습니다. 또한 알트코인과 스테이블코인, 그리고 지갑의 종류와 평가까지 포함되어 있습니다.
 categories: 블록체인
 sitemap: false
 hide_last_modified: true
@@ -208,4 +208,114 @@ hide_last_modified: true
 
 <p align="center">
 <img src="/assets/img/blog/coin_token.png">
+</p>
+
+코인
+- 코인은 물리적 화폐와 유사한 디지털 화폐입니다.
+- **코인은 자체 블록체인과 프로토콜을 가지고 운영됩니다.**
+- 코인은 주로 결제 수단으로 사용됩니다.
+
+토큰
+- 토큰은 특정 프로젝트에서 발행된 디지털 자산입니다.
+- **토큰은 자체 블록체인에서 운영되지 않습니다. 예를 들어, 이더리움 네트워크를 사용합니다.**
+- 토큰은 결제 및 디지털 계약에 사용됩니다.
+
+## 코인의 종류
+
+<p align="center">
+<img src="/assets/img/blog/coin_type.png">
+</p>
+
+## 주요 섹터(유틸리티)별 코인
+
+|분류|주요 코인|
+|:--:|:-:|
+|콘텐츠|세타(THETA), 코스모스(ATOM), 스팀(STEEM)|
+|탈중앙 금융(Defi)|유니스왑(UNI), 체인링크(LINK), 에이브(AAVE)|
+|분산 컴퓨팅|인터넷컴퓨터(ICP), 파일코인(FIL), 비트토렌스(BTT)|
+|사물인터넷|아이오타(IOTA), 헬륨(Helium), 이오스트(IOST)|
+|메타버스|디센트럴랜드(MANA), 더샌드박스(SAND)|
+|보안 인증|온톨로지(ONT), 시빅(CVC), 월드코인(WLD)|
+|자산 대출|메이커(MKR), 컴파운드(COMP)|
+|물류|비체인(VET)|
+|스포츠|칠리즈(CHZ)|
+|헬스케어|메디블록(MED)|
+
+## 알트코인(altcoins)
+
+- 암호화폐 시장의 선구자인 비트코인 이외의 후발 암호화폐를 의미함. **Alternative coin**의 축약어.
+- 알트코인은 법적인 화폐가 아니므로 ISO 4217처럼 표준화된 단축 코드가 없음. 괄호 안에 대문자로 표시한 것은 업계에서 흔히 사용되는 비공식적 코드.
+
+<p align="center">
+<img src="/assets/img/blog/altcoin.png">
+</p>
+
+## 스테이블코인(Stablecoins)
+
+- 암호화폐 중 시가총액이 가장 큰 비트코인, 이더리움은 가격변동성이 매우 큼. 이는 교환의 매개로 쓰이는데 장애가 됨.
+- 암호화폐를 교환의 매개체로 폭넓게 사용하기 위해서는 가격을 안정적으로 유지할 수 있는 스테이블코인의 필요성 대두.
+- 스테이블코인은 가치가 항상 특정 화폐에 연결된 토큰으로 **<u><span style="color:red">법정화폐 담보방식, 암호화폐 담보, 알고리즘 방식</span></u>**으로 운영됨.
+
+<p align="center">
+<img src="/assets/img/blog/stablecoin.png">
+</p>
+
+## 스테이블코인(Stablecoins) 작동방식
+
+<p align="center">
+<img src="/assets/img/blog/stablecoin2.png">
+</p>
+
+## 비트코인 트랜잭션 - 송금거래의 예
+
+- UTXO는 Unspent Transaction Output의 약자로서 '미사용 트랜잭션 출력값'으로 인터넷 계좌에서 잔고만 표시되는 계좌잔고 방식과 달리 UTXO는 마치 우리가 일상에서 휴대한 지갑속의 지폐와 유사하게 작동
+- UTXO와 상대적인 개념으로 STXO(Spent Transaction Output)라는 용어도 사용한다. UTXO 상태에서 사용했다면 해당 UTXO는 STXO 상태로 변경
+
+<p align="center">
+<img src="/assets/img/blog/bitcoin_transaction2.png">
+</p>
+
+- 금융시스템에선 결제가 일어난 후 일정기간 동안 청산(settlement)과정을 거치고 그 과정 속에서 법적, 기술적으로 소유권을 증명함.
+- 비트코인 네트워크에서 이루어지는 거래의 모호성을 대량의 컴퓨팅 파워를 이용한 채굴(Proof of Work)로 해결함.
+- 즉 비트코인 네트워크에서 결제는 증명이 가능한 법적 증거로 청산되는 것이 아니라 전 세계에 분산된 익명의 사람들의 컴퓨팅 파워로 청산되는 것임.
+
+<p align="center">
+<img src="/assets/img/blog/bitcoin_transaction3.png">
+</p>
+
+- 비트코인 백서에서 Satoshi Nakamoto가 UTXO(Unspent transaction output)모델로 알려진 트랜젹션의 input과 output 개념을 소개.
+- 암호화폐 7,000원을 송금한다면 지갑 주소 잔액 8,000원을 INPUT에 기록한 후 OUTPUT에는 B에게 7,000원을 송금하고, 1,000원은 자신에게 다시 되돌리는 요청을 함.
+
+<p align="center">
+<img src="/assets/img/blog/bitcoin_transaction4.png">
+</p>
+
+## 블록체인 기록 보관 방식의 차이점: 비트코인(UTXO) vs. 이더리움(계좌/잔고)
+
+<p align="center">
+<img src="/assets/img/blog/bitcoin_ethereum3.png">
+</p>
+
+## 지갑(Wallet)의
+
+- 지갑(wallet)은 주소와 키(key) 관리, 잔액 관리, 거래 생성, 거래 확인, 거래 내역 관리 등의 기능을 수행함. 지갑은 모바일 앱과 웹 서비스로 블록체인과의 인터페이스 역할.
+- 비트코인의 지갑은 공개 키 암호로 만든 키로 스마트폰 앱에서 사용하는 모바일 지갑, QR코드가 인쇄된 종이 지갑 등 그 종류가 다양함.
+
+<p align="center">
+<img src="/assets/img/blog/bitcoin_wallet.png">
+</p>
+
+## Hot Wallet(뜨거운 지갑)과 Cold Wallet(차가운 지갑)비교
+
+<p align="center">
+<img src="/assets/img/blog/hot_cold_wallet.png">
+</p>
+
+## Cold Wallet 평가
+
+- 암호화폐 시장이 지속적으로 성장하면서 이와 관련한 하드웨어 지갑에 대한 관심도 커지고 있음.
+- 중앙은행 디지털화폐, 네오뱅크 및 챌린저 뱅크 등장과 맞물린 암호화폐 거래소 확산, 예비 사용자들의 암호화폐 거래소 접근성 향상 등 여러 요인들이 콜드 스토리지 시장의 성장을 견인하고 있음.
+
+<p align="center">
+<img src="/assets/img/blog/cold_wallet.png">
 </p>
