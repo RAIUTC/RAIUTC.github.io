@@ -2,7 +2,8 @@
 layout: post
 title: Neural Networks & Backpropagation
 description: |
-  
+  Explore the fundamentals of neural networks, including the perceptron model, multi-layer perceptrons, activation functions, and backpropagation. Understand how these elements work together to enable machine learning and artificial intelligence.
+  > 인공신경망의 기초인 퍼셉트론 모델, 다층 퍼셉트론, 활성화 함수, 역전파 등을 탐색합니다. 이러한 요소들이 어떻게 함께 작동하여 기계 학습과 인공지능을 가능하게 하는지 이해합니다.
 categories: 인공지능(AI)
 sitemap: false
 hide_last_modified: true
@@ -198,4 +199,147 @@ for t in range(1000):
 ~~~
 <p align="center">
 <a href="https://github.com/RAIUTC/ML-DL-Study/blob/main/two_layer_multiple_layer_perceptrons.ipynb" target="_blank">소스코드(Source Code)</a>
+</p>
+
+## Computing Gradients
+
+Even more complex neural nets ...
+> 더 복잡한 신경망 ...
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/computing_gradients_2.png">
+</p>
+
+- 위와 같이 더욱 복잡한 신경망들의 Gradients를 직접 계산하기는 어렵다.
+
+## Computational Graph
+
+- 우리가 만든 모델을 수식으로 표현할 수 있듯이 그래프로도 표현 가능한데 이를 **Computational Graph**라고 한다.
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/computational_graph.png">
+</p>
+
+## Backpropagation Example
+
+$$ f(x, y, z) = (x + y)z $$
+
+For example, suppose the input is
+
+x = -2, y = 5, z = -4
+
+### <span style="color:green">Forward Pass </span>
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/forward_pass.png">
+</p>
+
+### <span style="color:red">Backpropagation</span>
+
+Partial derivative of $$ f $$ w.r.t. $$ z $$ is given by $$ \frac{\partial{f}}{\partial{z}} = \frac{\partial{qz}}{\partial{z}} = q $$
+> $$ f $$의 $$ z $$에 대한 편미분은 $$ \frac{\partial{f}}{\partial{z}} = \frac{\partial{qz}}{\partial{z}} = q $$
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/backpropagation.png">
+</p>
+
+## Chain Rule
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/chain_rule.png">
+</p>
+
+## Another Example: Logistic Regression
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/another_example_logistic_regression.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/another_example_logistic_regression_2.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/another_example_logistic_regression_3.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/another_example_logistic_regression_4.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/another_example_logistic_regression_5.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/another_example_logistic_regression_6.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/another_example_logistic_regression_7.png">
+</p>
+
+- Backpropagation을 하는 이유? &rarr; **gradient를 구해 W들이 얼마나 틀렸는지 Update하기 위해**
+- Logistic Regression에서 구하고 싶었던 <span style="color:red">Gradients</span>: <span style="color:red">$$ w_0, w_1, b $$ = -0.20, -0.40, 0.20</span>
+
+## Patterns in Gradient Flow
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/patterns_in_gradient_flow.png">
+</p>
+
+## Gradient Implementation
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/gradient_implementation.png">
+</p>
+
+- Forward pass
+
+~~~python
+def f(w0, x0, w1, x1, b):
+    s0 = w0 * x0
+    s1 = w1 * x1
+    s2 = s0 + s1
+    s3 = s2 + b
+    return 1.0 / (1.0 + np.exp(-s3)) # *-1 -> exp -> +1 -> 1/x
+~~~
+
+- Gradient computation
+
+~~~python
+grad_f = 1.0
+grad_s3 = grad_f * (1 - f) * f
+grad_b = grad_s3
+grad_s2 = grad_s3
+grad_s0 = grad_s2
+grad_s1 = grad_s2
+grad_w1 = grad_s1 * x1
+grad_x1 = grad_s1 * w1
+grad_w0 = grad_s0 * x0
+grad_x0 = grad_s0 * w0
+~~~
+
+<p align="center">
+<a href="https://github.com/RAIUTC/ML-DL-Study/blob/main/gradient_implementation.ipynb" target="_blank">소스코드(Source Code)</a>
+</p>
+
+## Vector Derivatives
+> 벡터 미분
+
+- **Scalar** to **scalar**: if $$ x $$ is slightly changes, how much will $$ y $$ change?
+> **스칼라**에서 **스칼라**로: $$ x $$가 약간 변경되면 $$ y $$가 얼마나 변경되나?
+
+$$ x \in \mathbb{R}^d, y \in \mathbb{R}, \frac{\partial{y}}{\partial{x}} \in \mathbb{R}$$
+
+- **Vector** to **scalar**: if each element $$ x_i $$ in $$ x $$ slightly changes, how much will $$ y $$ change?
+> **벡터**에서 **스칼라**로: $$ x $$의 각 요소 $$ x_i $$가 약간 변경되면 $$ y $$가 얼마나 변경되나?
+
+$$ x \in \mathbb{R}^n, y \in \mathbb{R}, \frac{\partial{y}}{\partial{x}} \in \mathbb{R}^n, (\frac{\partial{y}}{\partial{x}})_i = \frac{\partial{y}}{\partial{x_i}}$$
+
+- **Vector** to **vector**: if each element $$ x_i $$, in $$ x $$ slightly changes, how much will each element $$ y_i $$ in $$ y $$ change?
+> **벡터**에서 **벡터**로: $$ x $$의 각 요소 $$ x_i $$가 약간 변경되면 $$ y $$의 각 요소 $$ y_i $$가 얼마나 변경되나?
+
+$$ x \in \mathbb{R}^n, y \in \mathbb{R}^m, \frac{\partial{y}}{\partial{x}} \in \mathbb{R}^{m \times n}, (\frac{\partial{y}}{\partial{x}})_{ij} = \frac{\partial{y_i}}{\partial{x_j}}$$
+
+## Backpropagation with Vectors
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/backpropagation_with_vectors.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/backpropagation_with_vectors_2.png">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/backpropagation_with_vectors_3.png">
+</p>
+
+### Example: Backpropagation with Vectors
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/backpropagation_with_vectors_example.png">
+</p>
+
+## Backpropagation with Matrices
+
+<p align="center">
+<img src="/assets/img/blog/ai/2024-07-18-neural_network_1/backpropagation_with_matrices.png">
 </p>
