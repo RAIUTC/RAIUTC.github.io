@@ -343,3 +343,26 @@ $$ x \in \mathbb{R}^n, y \in \mathbb{R}^m, \frac{\partial{y}}{\partial{x}} \in \
 <p align="center">
 <img src="/assets/img/blog/ai/2024-07-18-neural_network_1/backpropagation_with_matrices.png">
 </p>
+
+## Remind Questions
+
+### 1. Linear Classifier로 학습할 수 없는 데이터셋 같은 경우는 어떠한 방법으로 학습할 수 있을까?(두 가지 방법)
+
+- 1. non linear한 decision boundary를 가진 데이터를 linear decision boundary를 가질 수 있도록 (e.g.g, high dimensional space로 mapping(SVM &rarr; Kernel)) 변환해 linearly separate하도록 만드는 것
+- 2. **Perceptron을 여러 층으로 쌓는것. linear layer를 여러 층으로 쌓으면 여전히 linear하지만 non-linearity를 부여하는 활성화 함수(activation function(e.g.g., ReLU, Sigmoid))를 적용해 해결.**
+
+### 2. Backpropagation을 할 때 각 노드에서 어떠한 일이 일어나는가?
+
+- Forward pass가 진행되어 예측값을 계산하고, 이를 가지고 Loss를 계산해 맨 뒤부터 Loss값을 계산한 Upstream Gradient를 계산한다. 그 값을 받아 Local Gradient(Local Function 자체를 미분했을 때 나오는 값)가 곱해지며 Backward pass를 진행한다. 각 노드별로 input, output은 여러개일 수 있다.
+
+### 3-1. input으로 20차원의 값을 받고 Output으로 10차원의 값이 나가는 node가 있다. 이 노드의 Upstream Gradient는 몇 차원일까?
+
+- **10차원. Output의 차원과 같다.**
+
+### 3-2. Local Gradient는?
+
+- 20 * 10 = 200차원. **(input dim * output dim)**
+
+### 3-3. DownStram Gradient는?
+
+- **20차원. Input의 차원과 같다.**
