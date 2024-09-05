@@ -102,14 +102,10 @@ menu:
     url:               /ai/
   - title:             컴퓨터보안(Computer Security)
     url:               /computer-security/
-  - title:             임베디드 시스템(Embedded System)
-    url:               /embedded-system/
-  - title:             클라우드컴퓨팅(Cloud Computing)
-    url:               /cloud-computing/
   - title:             자료구조(Data Structure)
-    url:               /data-structure/
-  - title:             블록체인(Block Chain)
-    url:               /block-chain/  
+    url:               /data-structure/ 
+  - title:             Data Mining
+    url:               /data-mining/ 
   
 
 # Add links to the footer.
